@@ -30,7 +30,15 @@ from Analysis.AnalysisAll import AnalysisAll
 import logging
 
 
-def main(start_date, end_date, logger):
+def main(start_date, end_date):
+    logger = logging.getLogger()
+    file_log = logging.FileHandler(Util.get_log_path())
+    logger.addHandler(file_log)
+
+    formatter = logging.Formatter("%(asctime)s %(levelname)s %(message)s")
+    file_log.setFormatter(formatter)
+    logger.setLevel(logging.INFO)
+
 
     begin_time = time.clock()
 
@@ -68,15 +76,6 @@ if __name__ == "__main__":
     transaction_data_path = Util.get_path_transaction_data()
     output_path = Util.get_path_output()
 
-    logger = logging.getLogger()
-    file_log = logging.FileHandler(Util.get_log_path())
-    logger.addHandler(file_log)
-
-    formatter = logging.Formatter("%(asctime)s %(levelname)s %(message)s")
-    file_log.setFormatter(formatter)
-    logger.setLevel(logging.INFO)
-
-
     data_framework = DataFramework(start_date_str=start_date, end_date_str=end_date, path_tickdata=tick_data_path, path_transaction_data=transaction_data_path)
 
     data_framework.update_date_list()
@@ -84,7 +83,7 @@ if __name__ == "__main__":
     for date_str in data_framework.date_list:
         print(date_str)
         # main(date_str, date_str, logger)
-        pool.apply_async(main, args=(date_str, date_str, logger, ))
+        pool.apply_async(main, args=(date_str, date_str, ))
     pool.close()
     pool.join()
 
