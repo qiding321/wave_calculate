@@ -27,14 +27,14 @@ import socket
 name = socket.gethostname()
 
 if name == '2013-20151201LG':
-    # path_root = 'F:\\WaveCalculateResult\\'
-    # intraday_team_return_path = path_root + 'intraday_team_return.csv'
+    path_root = 'F:\\IntradayTeamPerformanceAnalysis\\'
+    intraday_team_return_path = path_root + 'intraday_team_return.csv'
 
     raw_data_path_root = '\\\\2013-20151109CR\\StockTick\\'
     output_path = 'F:\\IntradayTeamPerformanceAnalysis\\'
 else:
-    # path_root = 'C:\\Users\\dqi\\Documents\\Output\\WaveCalculateResult\\'
-    # intraday_team_return_path = path_root + 'intraday_team_return.csv'
+    path_root = 'C:\\Users\\dqi\\Documents\\Data\\WaveCalculateResult\\'
+    intraday_team_return_path = path_root + 'intraday_team_return.csv'
 
     raw_data_path_root = '\\\\2013-20151109CR\\StockTick\\'
     output_path = 'C:\\Users\\dqi\\Documents\\Output\\WaveCalculateResult\\'
@@ -197,6 +197,52 @@ def date2datetime(s):
 def date2datestr(s):
     s = str(s)
     return '-'.join([s[0:4], s[4:6], s[6:]])
+
+
+def get_intraday_trading_data():
+    data_raw = pd.read_csv(intraday_team_return_path)
+    data_raw['month'] = data_raw['date'].apply(lambda x: x[:-3])
+    intraday_team_return_data = data_raw.groupby(['month', 'coid'], group_keys=False, as_index=False)[['traded_return', 'traded_amount', 'traded_volume']].mean()
+    intraday_team_return_data['coid'] = intraday_team_return_data['coid'].apply(lambda i: str(i).zfill(6))
+    intraday_team_return_data['month_last'] = intraday_team_return_data['month'].apply(get_date_list_last_month)
+    return intraday_team_return_data
+
+
+def get_date_list_last_month(month):
+    year_, month_ = month.split('-')
+    if int(month_) == 1:
+        year_last_int = int(year_) - 1
+        month_last_int = 12
+    else:
+        year_last_int = int(year_)
+        month_last_int = int(month_) - 1
+
+    date_last_month = str(year_last_int) + '-' + str(month_last_int).zfill(2)
+
+    return date_last_month
+
+
+def get_intraday_trading_date_list_last_month():
+    data = get_intraday_trading_data()
+    month_last_list = list(data['month_last'])
+    date_list = []
+    for month in month_last_list:
+        for day in range(1, 32):
+            date = month.replace('-', '') + str(day).zfill(2)
+            date_list.append(date)
+    return date_list
+
+
+def get_intraday_trading_stk(date_str):
+    data = get_intraday_trading_data()
+    month = date_str[0:4] + '-' + date_str[4:6]
+    data2 = data[data['month_last'] == month]
+    if len(data2) == 0:
+        return []
+    else:
+        stk_list = list(data2['coid'].apply(lambda s_: str(s_).zfill(6)))
+        stk_list_ = list(set(stk_list))
+        return stk_list_
 
 
 if __name__=='__main__':

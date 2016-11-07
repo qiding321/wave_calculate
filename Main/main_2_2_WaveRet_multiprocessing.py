@@ -53,22 +53,26 @@ def main(start_date, end_date):
     output_path = Util.get_path_output()
 
     # ======================== Data ============================= #
-    data_framework = DataFramework(start_date_str=start_date, end_date_str=end_date, path_tickdata=tick_data_path, path_transaction_data=transaction_data_path)
+    data_framework = DataFramework(
+        start_date_str=start_date, end_date_str=end_date,
+        path_tickdata=tick_data_path, path_transaction_data=transaction_data_path,
+        use_specific_stk=True,
+    )
 
     # ======================== Strategy ============================= #
     define_wave = WaveByTick(Util.set_global_paras())
 
     # ======================== Analysis ============================= #
     analysis_all = AnalysisAll(data_framework, define_wave)
-    analysis_all.loop_date_stk_calret(use_freq_stk=use_freq_stk, output_path=output_path, logger=logger)
-    analysis_all.loop_date_stk_plot(use_freq_stk=use_freq_stk,output_path=output_path)
+    # analysis_all.loop_date_stk_calret(use_freq_stk=use_freq_stk, output_path=output_path, logger=logger)
+    analysis_all.loop_date_stk_plot(use_freq_stk=use_freq_stk,output_path=output_path, logger=logger)
 
     # ======================== End ============================= #
     print("Complete! Total Time Used:", time.clock()-begin_time)
 
 
 if __name__ == "__main__":
-    multiprocessing_num = 2
+    multiprocessing_num = 5
     pool = multiprocessing.Pool(processes=multiprocessing_num)
 
     start_date = '20160101'
@@ -77,13 +81,17 @@ if __name__ == "__main__":
     transaction_data_path = Util.get_path_transaction_data()
     output_path = Util.get_path_output()
 
-    data_framework = DataFramework(start_date_str=start_date, end_date_str=end_date, path_tickdata=tick_data_path, path_transaction_data=transaction_data_path)
+    data_framework = DataFramework(
+        start_date_str=start_date, end_date_str=end_date,
+        path_tickdata=tick_data_path, path_transaction_data=transaction_data_path,
+        use_specific_stk=True,
+    )
 
     data_framework.update_date_list()
 
     for date_str in data_framework.date_list:
         print(date_str)
-        # main(date_str, date_str, logger)
+        # main(date_str, date_str)
         pool.apply_async(main, args=(date_str, date_str, ))
     pool.close()
     pool.join()

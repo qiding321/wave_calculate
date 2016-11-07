@@ -65,7 +65,7 @@ class TickdataOneDayOneStk:
             # self.px_mid_this_day_this_stk = px_mid_this_day_this_stk[px_mid_this_day_this_stk>0]
 
         except Exception as e:
-            print('data_error', e)
+            print('data_error, {}, {}, {}'.format(self.date_str, self.stk_str, e))
             self.px_mid_this_day_this_stk = pd.DataFrame({"mid_prc": [], "ask1": [], "bid1": [],
                                                           "asize3": [], "asize2": [], "asize1": [],
                                                           "bsize1": [], "bsize2": [], "bsize3": [],

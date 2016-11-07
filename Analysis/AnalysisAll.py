@@ -36,7 +36,7 @@ class AnalysisAll:
         self.data_framework = data_framework
         self.define_wave = define_wave
 
-    def loop_date_stk_plot(self,use_freq_stk,output_path):
+    def loop_date_stk_plot(self,use_freq_stk,output_path,logger=None):
 
         self.data_framework.update_date_list()
 
@@ -57,9 +57,10 @@ class AnalysisAll:
 
                 analysis_wave = AnalysisOneDayOneStk(data_date_stk.date_str,data_date_stk.stk_str,use_freq_stk,output_path)
                 analysis_wave.analyze_plot(data_date_stk,wave_record,self.define_wave.paras,intraday_record)
+                analysis_wave.analyze_ret(data_date_stk, wave_record, self.define_wave.paras, logger=logger)
 
-                print("Processed", one_date, one_stk,time.clock()-time_begin)
-                print("=====================================================")
+                # print("Processed", one_date, one_stk,time.clock()-time_begin)
+                # print("=====================================================")
 
     def loop_date_stk_calret(self, use_freq_stk, output_path, logger=None):
 

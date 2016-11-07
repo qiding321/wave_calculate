@@ -25,7 +25,7 @@ import Util.Util as Util
 
 class DataFramework:
 
-    def __init__(self, start_date_str, end_date_str, path_tickdata, path_transaction_data):
+    def __init__(self, start_date_str, end_date_str, path_tickdata, path_transaction_data, use_specific_stk=False):
 
         self.start_date_str = start_date_str
         self.end_date_str = end_date_str
@@ -35,11 +35,16 @@ class DataFramework:
         self.date_list = []
         self.stk_list = []
 
+        self.use_specific_stk = use_specific_stk
+
     def update_date_list(self):
 
-        date_list_raw = []
-        date_list_raw.extend(os.listdir(self.path_tickdata + "SH"))
-        date_list_raw.extend(os.listdir(self.path_tickdata + "SZ"))
+        if not self.use_specific_stk:
+            date_list_raw = []
+            date_list_raw.extend(os.listdir(self.path_tickdata + "SH"))
+            date_list_raw.extend(os.listdir(self.path_tickdata + "SZ"))
+        else:
+            date_list_raw = Util.get_intraday_trading_date_list_last_month()
         # Delete duplicates
         date_list_raw = list(set(date_list_raw))
         date_list = [d for d in date_list_raw if self.start_date_str <= d <= self.end_date_str]
@@ -47,7 +52,7 @@ class DataFramework:
         self.date_list = sorted(date_list)
 
     def update_stk_list(self, date_str, use_freq_stk):
-        if not use_freq_stk:
+        if not use_freq_stk and not self.use_specific_stk:
             stk_list_raw = []
             stk_list_raw.extend(os.listdir(self.path_tickdata + "SH\\" + date_str))
             stk_list_raw.extend(os.listdir(self.path_tickdata + "SZ\\" + date_str))
@@ -56,9 +61,11 @@ class DataFramework:
             stk_list = [s.split('.')[0] for s in stk_list_raw]
             # stk_list = ['002308']  # todo
             self.stk_list = sorted(stk_list)
-
-        else:
+        elif not self.use_specific_stk:
             stk_list = Util.get_frequently_trading_list()
+            self.stk_list = sorted(stk_list)
+        else:
+            stk_list = Util.get_intraday_trading_stk(date_str)
             self.stk_list = sorted(stk_list)
 
     def get_tickdata_from_csv_this_day_this_stk(self, date_str, stk_str):
