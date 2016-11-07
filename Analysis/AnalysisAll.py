@@ -83,7 +83,7 @@ class AnalysisAll:
                     analysis_wave.analyze_ret(data_date_stk, wave_record, self.define_wave.paras, logger=logger)
 
                 except Exception as e:
-                    print('Error:', one_date, one_stk, e)
+                    print('============================Error:', one_date, one_stk, e, '=========================')
                     logger.error('Error:' + str(one_date) + str(one_stk) + str(e))
                 # print(time.clock()-begin)
 

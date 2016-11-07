@@ -107,6 +107,7 @@ class DataFramework:
             return data_raw
 
         except:
+            print('=====================================error in get intraday record=====================================')
             return pd.DataFrame()
 
 

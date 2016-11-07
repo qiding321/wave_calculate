@@ -34,17 +34,21 @@ class AnalysisOneDayOneStk:
         self.output_path = output_path
         self.figure_path = output_path + "figure\\" + self.date_str + "\\" + self.stk_str + ".jpg"
 
-        # self.wave_record_txt_path = output_figure_path + "wave_record.txt"
-
-    def analyze_plot(self,data_date_stk,wave_record,paras,intraday_record):    # MK 20160621
-        assert isinstance(data_date_stk,TickdataOneDayOneStk)
-        assert isinstance(wave_record,WaveRecord)
-
-        # Figure Document per Day
+        if not os.path.exists(self.output_path):
+            os.makedirs(self.output_path)
+        if not os.path.exists(self.output_path + 'wave_ret_record\\'):
+            os.makedirs(self.output_path + 'wave_ret_record\\')
         if os.path.exists(self.output_path + "figure\\" + self.date_str):
             pass
         else:
             os.makedirs(self.output_path + "figure\\" + self.date_str)
+
+
+                # self.wave_record_txt_path = output_figure_path + "wave_record.txt"
+
+    def analyze_plot(self,data_date_stk,wave_record,paras,intraday_record):    # MK 20160621
+        assert isinstance(data_date_stk,TickdataOneDayOneStk)
+        assert isinstance(wave_record,WaveRecord)
 
         # CSV file to store the Wave Info
         if not os.path.exists(self.output_path + "figure\\" + self.date_str + "\\" + "wave_record_" + self.date_str + ".csv"):

@@ -22,20 +22,37 @@ mkt_close_time_morning_str = '113000'
 mkt_open_time_afternoon_str = '130000'
 mkt_close_time_afternoon_str = '150000'
 
+import socket
+
+name = socket.gethostname()
+
+if name == '2013-20151201LG':
+    # path_root = 'F:\\WaveCalculateResult\\'
+    # intraday_team_return_path = path_root + 'intraday_team_return.csv'
+
+    raw_data_path_root = '\\\\2013-20151109CR\\StockTick\\'
+    output_path = 'F:\\IntradayTeamPerformanceAnalysis\\'
+else:
+    # path_root = 'C:\\Users\\dqi\\Documents\\Output\\WaveCalculateResult\\'
+    # intraday_team_return_path = path_root + 'intraday_team_return.csv'
+
+    raw_data_path_root = '\\\\2013-20151109CR\\StockTick\\'
+    output_path = 'C:\\Users\\dqi\\Documents\\Output\\WaveCalculateResult\\'
+
 
 def get_path_tickdata():
     # return r"E:\Mingshi\DATA\StcokTick_3s\Tick\\"
-    return r'\\2013-20151109CR\StockTick\Tick\\'
+    return raw_data_path_root + 'Tick\\'
     # return 'I:\\IntradayData3Seconds\\'
     # return r'Y:\Project Data\Mingshi\MS_Program\Retrace_Program\Strategy\8_201604_IntraDay\Strategy\3_Wave_Define\tick_sample\\'
 
 
 def get_log_path():
-    return 'E:\\MyStrategy\\WaveCalculation2\\Log\\LogMultiprocess.log'
+    return output_path + 'LogMultiprocess.log'
 
 
 def get_path_transaction_data():
-    return r'\\2013-20151109CR\StockTick\Transaction\\'
+    return raw_data_path_root + 'Transaction\\'
     # return 'I:\\IntradayDataTransaction\\'
 
 
@@ -48,21 +65,21 @@ def get_path_output():
     # return r'Y:\Project Data\Mingshi\MS_Program\Retrace_Program\Strategy\8_201604_IntraDay\Strategy\3_Wave_Define\Python_Wave_Calculate\Result\figure\\'
     # return r"F:\MK_temp\Python_Wave_Calculate\Result\\"
     # return 'E:\\StrategyResult\\WaveCalculation\\wave_output_0701\\'
-    return 'E:\\StrategyResult\\WaveCalculation\\wave_output_0704_2\\'
+    return output_path
 
 
 def get_daily_ret_data_path():
     return r'\\SHIMING\Desktop\qiding\DailyMarketData\dailyretme.csv'
 
 
-def get_path_output_0707():
-    return 'E:\\StrategyResult\\WaveCalculation\\wave_output_0707\\'
+# def get_path_output_0707():
+#     return 'E:\\StrategyResult\\WaveCalculation\\wave_output_0707\\'
 
 
 def get_wave_record_path():
     # return 'E:\\StrategyResult\\WaveCalculation\\wave_output_0701\\'
     # return 'E:\\StrategyResult\\WaveCalculation\\wave_output_0704_2\\'
-    return 'E:\\StrategyResult\\WaveCalculation\\wave_output_0707\\'
+    return output_path
 
 
 def set_global_paras():
