@@ -61,6 +61,7 @@ def main(start_date, end_date):
     # ======================== Analysis ============================= #
     analysis_all = AnalysisAll(data_framework, define_wave)
     analysis_all.loop_date_stk_calret(use_freq_stk=use_freq_stk, output_path=output_path, logger=logger)
+    analysis_all.loop_date_stk_plot(use_freq_stk=use_freq_stk,output_path=output_path)
 
     # ======================== End ============================= #
     print("Complete! Total Time Used:", time.clock()-begin_time)
